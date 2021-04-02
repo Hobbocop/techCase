@@ -4,6 +4,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.*;
 
+/**
+ * Utility methods for displaying dialogs of different kinds
+ *
+ * Author: Filip Bark
+ */
 public class DialogUtils {
 
 	public static int showLoginDialog (Component parent, StringTuple tuple, String title) {

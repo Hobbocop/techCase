@@ -4,6 +4,13 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+/**
+ * Class used to represent a service - with some minor utility methods.
+ *
+ * It will verify that url entered (when updating url) is a valid url.
+ *
+ *  Author: Filip Bark
+ */
 public class Service {
 	private String serviceName;
 	private String url;

@@ -4,14 +4,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * Main class for code test.
- * 
+ *
  * Author: Filip Bark
  */
 public class TechCase {

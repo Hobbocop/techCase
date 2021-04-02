@@ -11,6 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+/**
+ * The main panel for displaying buttons and table. Includes the action listeners for the buttons.
+ *
+ * Author: Filip Bark
+ */
 public class ServiceTablePanel extends JPanel {
 
 	// Serial version is in format date-time to certify uniqueness

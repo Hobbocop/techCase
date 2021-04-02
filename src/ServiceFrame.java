@@ -5,6 +5,11 @@ import javax.swing.JScrollPane;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * A Jframe specially made to hold ServiceTablePanels.
+ *
+ * Author: Filip Bark
+ */
 public class ServiceFrame extends JFrame {
 
 	// Serial version is in format date-time to certify uniqueness

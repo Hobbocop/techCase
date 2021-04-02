@@ -3,6 +3,13 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Underlying table model to enable Services to be reprensted easily in a table format.
+ * Includes some additional methods to add and remove services.
+ * // TODO - add method and button for removing services.. maybe..
+ *
+ * Author: Filip Bark
+ */
 public class ServiceTableModel extends AbstractTableModel {
 
 	// Serial version is in format date-time to certify uniqueness
