@@ -1,7 +1,6 @@
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.Optional;
 
 /**
@@ -14,23 +13,24 @@ import java.util.Optional;
 public class Service {
 	private String serviceName;
 	private String url;
-	private User user;
-	private Timestamp lastModified;
+	private String user;
+	private String lastModified;
+	private String created;
 	private Boolean lastResponseOk;
-	private Timestamp created;
 
 	// Constructor for newly created Services, creating a time-stamp when they are created
-	public Service (String name, String url, User user) {
-		this (name, url, user, new Timestamp (System.currentTimeMillis ()));
+	public Service (String name, String url, String user) {
+		this (name, url, user, MyStringUtils.getNow (), null);
 	}
 
 	// Constructor for stored Services that already have a timestamp
-	public Service (String name, String url, User user, Timestamp created) {
+	public Service (String name, String url, String user, String created, String lastModified) {
 		this.serviceName = name;
 		this.url = url;
 		this.user = user;
 		this.created = created;
-		this.lastResponseOk = null;
+		this.lastModified = lastModified;
+		lastResponseOk = null;
 	}
 
 	public String getName () {
@@ -39,16 +39,22 @@ public class Service {
 
 	public void updateName (String newName) {
 		this.serviceName = newName;
+		lastModified = MyStringUtils.getNow ();
 	}
 
 	public String getUrl () {
 		return url;
 	}
 
+	public String getCreatedBy () {
+		return user;
+	}
+
 	public void updateUrl (String newUrl) throws MalformedURLException, URISyntaxException {
 		// TODO - for the actual release, should verity email bfore updating!!!
 		// this.url = verify (newUrl);
 		this.url = newUrl;
+		lastModified = MyStringUtils.getNow ();
 	}
 
 	private String verify (String newUrl) throws MalformedURLException, URISyntaxException {
@@ -58,24 +64,23 @@ public class Service {
 
 	public synchronized void updateLastResponse (boolean response) {
 		lastResponseOk = response;
-		lastModified = new Timestamp (System.currentTimeMillis ());
 	}
 
 	public synchronized Optional<Boolean> getLastResponseOk () {
 		return Optional.ofNullable (lastResponseOk);
 	}
 
-	public Timestamp getCreatedTimeStamp () {
+	public synchronized String getCreatedTime () {
 		return created;
 	}
 
-	public synchronized Timestamp getLastModifiedTimeStamp () {
+	public synchronized String getLastModifiedTime () {
 		return lastModified;
 	}
 
 	// Users should only be able to see their own services, admins should be able to see all!
 	public boolean shouldShowFor (User currentUser) {
-		return user == null || user.isAdmin () || user.equals (currentUser);
+		return user == null || currentUser.isAdmin || user.equals (currentUser.getUserName ());
 	}
 
 }

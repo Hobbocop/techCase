@@ -21,11 +21,11 @@ public class ServiceFrame extends JFrame {
 	private ServiceTablePanel serviceTablePanel;
 	private JTextField statusTextField;
 
-	public ServiceFrame (String title, List<Service> services, User currentUser) {
+	public ServiceFrame (String title, List<Service> services, User currentUser, DataBaseHandler dbh) {
 		super (title);
 		setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
-		serviceTablePanel = new ServiceTablePanel (services, currentUser);
+		serviceTablePanel = new ServiceTablePanel (services, currentUser, dbh);
 		getContentPane ().add (new JScrollPane (serviceTablePanel), BorderLayout.CENTER);
 
 		statusTextField = new JTextField ("Status text");

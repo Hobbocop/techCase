@@ -1,4 +1,3 @@
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -44,14 +43,14 @@ public class ServiceTableModel extends AbstractTableModel {
 			case 0:
 				return tmp.getName ();
 			case 1:
-				return handleTimeStamp (tmp.getLastModifiedTimeStamp ());
-			case 2:
 				var response = tmp.getLastResponseOk ();
 				if (response.isPresent ())
 					return formatResponse (response.get ());
 				return "-";
+			case 2:
+				return handleTime (tmp.getCreatedTime ());
 			case 3:
-				return handleTimeStamp (tmp.getCreatedTimeStamp ());
+				return handleTime (tmp.getLastModifiedTime ());
 			case 4:
 				return tmp.getUrl ();
 			default:
@@ -62,11 +61,10 @@ public class ServiceTableModel extends AbstractTableModel {
 
 	// Timestamps are the underlying database type, they shouldn't be shown to the user.
 	// This method [will] format them to look nicer.
-	private Object handleTimeStamp (Timestamp time) {
+	private Object handleTime (String time) {
 		if (time == null)
 			return "-";
 
-		//TODO - format this to look pretty... Maybe even convert to Date or some such
 		return time;
 	}
 

@@ -26,13 +26,15 @@ public class ServiceTablePanel extends JPanel {
 	private User currentUser;
 
 	private ServiceTableModel serviceTableModel;
+	private DataBaseHandler dbh;
 
-	public ServiceTablePanel (List<Service> services, User currentUser) {
+	public ServiceTablePanel (List<Service> services, User currentUser, DataBaseHandler dbh) {
 		super (new BorderLayout ());
 
 		setPreferredSize (new Dimension (800, 800));
 		periodicTestingPaused = false;
 		this.currentUser = currentUser;
+		this.dbh = dbh;
 
 		serviceTable = createTable (services);
 		add (new JScrollPane (serviceTable), BorderLayout.CENTER);
@@ -43,7 +45,7 @@ public class ServiceTablePanel extends JPanel {
 
 	private JTable createTable (List<Service> services) {
 		// Hard coded for ease of use, should be changed later on for scalability
-		String[] columnNames = {"Name", "Checked", "Status", "Added", "Url"};
+		String[] columnNames = {"Name", "Status", "Added", "last modeified", "Url"};
 
 		serviceTableModel = new ServiceTableModel (services, columnNames);
 
@@ -115,7 +117,7 @@ public class ServiceTablePanel extends JPanel {
 		if (sd.s1.equals ("") || sd.s2.equals (""))
 			return null;
 
-		var newService = new Service (sd.s1, "", currentUser);
+		var newService = new Service (sd.s1, "", currentUser.getUserName ());
 		try {
 			newService.updateUrl (sd.s2);
 		} catch (MalformedURLException | URISyntaxException e) {
@@ -129,13 +131,12 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private void addNewServiceToModel (Service newService) {
-		// TODO - also add service to Database!
+		dbh.storeService (newService);
 		serviceTableModel.AddService (newService);
 		serviceTable.updateUI ();
 	}
 
 	private Object manuallyTestSelectedService () {
-		// TODO - manually perform a http test for the selected service
 		System.out.println ("Test service in row " + serviceTable.getSelectedRow ());
 
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
