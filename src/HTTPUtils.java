@@ -10,9 +10,10 @@ public class HTTPUtils {
 
 	public static boolean testSingleService (Service service) {
 		int status = -1;
+		HttpURLConnection con = null;
 		try {
 			URL url = new URL (service.getUrl ());
-			HttpURLConnection con = (HttpURLConnection) url.openConnection ();
+			con = (HttpURLConnection) url.openConnection ();
 			con.setRequestMethod ("GET");
 			con.setReadTimeout (5000);
 			con.connect ();
@@ -22,6 +23,9 @@ public class HTTPUtils {
 		} catch (IOException e) {
 			System.out.print ("Uh oh");
 			return false;
+		} finally {
+			if (con != null)
+				con.disconnect ();
 		}
 
 		if (status == HttpURLConnection.HTTP_OK)
