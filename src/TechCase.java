@@ -3,8 +3,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  * Main class for code test.
@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
  * Author: Filip Bark
  */
 public class TechCase {
+
+	private static final int THREAD_SLEEP_DURATION = 5000;
 
 	public static void main (String[] args) {
 		// [MAYBE]  TODO - add support for I18n handling
@@ -30,7 +32,6 @@ public class TechCase {
 			return;
 		}
 
-		// TODO - add http request support to test services
 		// TODO - add database support
 
 		// Start the program!
@@ -89,10 +90,63 @@ public class TechCase {
 	private static void run (List<Service> services, User currentUser) {
 		// TODO - this should be moved to a separate class, maybe a KryFrame?
 		// TODO - The frame should contain a panel, which in turns contains a Table (of all services) and buttons
-		JFrame frame = new ServiceFrame ("Kry tech case", services, currentUser);
+		ServiceFrame frame = new ServiceFrame ("Kry tech case", services, currentUser);
 
 		// Open/Show the frame
 		frame.setVisible (true);
+
+		Thread httpChecker = createCheckerThread (frame, services);
+
+		// Setting the background thread to a Daemon so that it shuts down when the program finishes.
+		httpChecker.setDaemon (true);
+		httpChecker.start ();
+	}
+
+	private static Thread createCheckerThread (ServiceFrame frame, List<Service> services) {
+		return new Thread (new Runnable () {
+			@Override public void run () {
+				// This thread will periodically check all services
+				while (true) {
+					frame.setStatusText ("Checking services...");
+					services.forEach (s -> HTTPUtils.testSingleService (s));
+					frame.setStatusText ("Services have been checked. ");
+
+					// Update the table based on the new results
+					updateTable (frame);
+
+					// Trye to sleep
+					sleep ();
+
+					// Pause period if button was pressed before or during sleeping phase.
+					maybePausePeriod ();
+				}
+			}
+
+			// Beacuse this thread is not on EDT - we need to tell swing to update it when it has time on EDT
+			private void updateTable (ServiceFrame frame) {
+				SwingUtilities.invokeLater (new Runnable () {
+
+					@Override public void run () {
+						frame.getServicePanel ().updateTable ();
+					}
+				});
+			}
+
+			private void sleep () {
+				try {
+					Thread.sleep (THREAD_SLEEP_DURATION);
+				} catch (InterruptedException e) {
+					e.printStackTrace ();
+				}
+			}
+
+			// In order to pause automatic checking - we just trap the thread in an infinite loop
+			private void maybePausePeriod () {
+				while (frame.getServicePanel ().periodPaused ()) {
+					frame.setStatusText ("Periodic testing disabled");
+				}
+			}
+		});
 	}
 
 }

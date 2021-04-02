@@ -56,12 +56,12 @@ public class Service {
 		return u.toURI ().toString ();
 	}
 
-	public void updateLastResponse (boolean response) {
+	public synchronized void updateLastResponse (boolean response) {
 		lastResponseOk = response;
 		lastModified = new Timestamp (System.currentTimeMillis ());
 	}
 
-	public Optional<Boolean> getLastResponseOk () {
+	public synchronized Optional<Boolean> getLastResponseOk () {
 		return Optional.ofNullable (lastResponseOk);
 	}
 
@@ -69,7 +69,7 @@ public class Service {
 		return created;
 	}
 
-	public Timestamp getLastModifiedTimeStamp () {
+	public synchronized Timestamp getLastModifiedTimeStamp () {
 		return lastModified;
 	}
 

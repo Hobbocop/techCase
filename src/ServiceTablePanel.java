@@ -22,7 +22,7 @@ public class ServiceTablePanel extends JPanel {
 	// I won't actually serialize it, but JFrames implements serializable so I have to declare
 	private static final long serialVersionUID = 2021_04_02_13_24L;
 	private JTable serviceTable;
-	private boolean periodicTestingEnabled;
+	private boolean periodicTestingPaused;
 	private User currentUser;
 
 	private ServiceTableModel serviceTableModel;
@@ -31,7 +31,7 @@ public class ServiceTablePanel extends JPanel {
 		super (new BorderLayout ());
 
 		setPreferredSize (new Dimension (800, 800));
-		periodicTestingEnabled = true;
+		periodicTestingPaused = false;
 		this.currentUser = currentUser;
 
 		serviceTable = createTable (services);
@@ -91,7 +91,9 @@ public class ServiceTablePanel extends JPanel {
 			handleUrlException (st.s2);
 		}
 
-		updateServiceInModel (service);
+		synchronized (service) {
+			updateServiceInModel (service);
+		}
 		return null;
 	}
 
@@ -138,20 +140,29 @@ public class ServiceTablePanel extends JPanel {
 
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
-		service.updateLastResponse (HTTPUtils.testSingleService (service));
+		HTTPUtils.testSingleService (service);
 		serviceTable.updateUI ();
 		return null;
 	}
 
 	private Object toggleAutomaticTesting (JButton srcButton) {
-		if (periodicTestingEnabled) {
-			periodicTestingEnabled = false;
+		if (!periodicTestingPaused) {
+			periodicTestingPaused = true;
 			srcButton.setText ("Resume automatic testing");
 		} else {
-			periodicTestingEnabled = true;
+			periodicTestingPaused = false;
 			srcButton.setText ("Pause automatic testing");
 		}
 
 		return true;
 	}
+
+	public boolean periodPaused () {
+		return periodicTestingPaused;
+	}
+
+	public void updateTable () {
+		serviceTable.updateUI ();
+	}
+
 }
