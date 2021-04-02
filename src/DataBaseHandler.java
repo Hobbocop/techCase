@@ -78,8 +78,6 @@ public class DataBaseHandler {
 
 	}
 
-	// TODO - add a method to update Services... This requires some sort of ID for each service that won't get modified...
-	
 	private Connection connect () {
 		Connection conn = null;
 
@@ -92,6 +90,18 @@ public class DataBaseHandler {
 		}
 
 		return conn;
+	}
+
+	public void removeService (Service service) {
+		// TODO - add a method to remove Services... This requires some sort of ID for each service that won't get modified...
+	}
+
+	public void updateService (Service service) {
+		// TODO - add a method to update Services... This requires some sort of ID for each service that won't get modified...
+	}
+
+	public int getMaxServiceId () {
+		return 0;
 	}
 
 }

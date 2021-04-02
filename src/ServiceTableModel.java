@@ -32,6 +32,10 @@ public class ServiceTableModel extends AbstractTableModel {
 		System.out.println (services);
 	}
 
+	public void removeService (Service service) {
+		services.remove (service);
+	}
+
 	// This method is called by the JTable to figure out what should be written in each cell.
 	// This is the method that's used to explain how a list of services becomes a bunch of cells
 	@Override public Object getValueAt (int row, int column) {

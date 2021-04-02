@@ -68,6 +68,10 @@ public class ServiceTablePanel extends JPanel {
 		addServiceButton.addActionListener (e -> addNewService ());
 		buttonPanel.add (addServiceButton);
 
+		JButton deleteServiceButton = new JButton ("Remove selected service");
+		deleteServiceButton.addActionListener (e -> removeSelectedService ());
+		buttonPanel.add (deleteServiceButton);
+
 		JButton testServiceButton = new JButton ("Manually test service");
 		testServiceButton.addActionListener (e -> manuallyTestSelectedService ());
 		buttonPanel.add (testServiceButton);
@@ -79,7 +83,12 @@ public class ServiceTablePanel extends JPanel {
 		return buttonPanel;
 	}
 
-	private Object editSelectedService () {
+	private void editSelectedService () {
+		if (serviceTable.getSelectedRow () == -1) {
+			DialogUtils.showMessageDialog (this, "No service selected", "Edit service");
+			return;
+		}
+
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
 		var st = new StringTuple (service.getName (), service.getUrl ());
@@ -96,12 +105,11 @@ public class ServiceTablePanel extends JPanel {
 		synchronized (service) {
 			updateServiceInModel (service);
 		}
-		return null;
 	}
 
 	private void updateServiceInModel (Service service) {
-		// TODO - update service in database...
-		serviceTable.updateUI ();
+		dbh.updateService (service);
+		updateTable ();
 	}
 
 	private void handleUrlException (String url) {
@@ -109,31 +117,41 @@ public class ServiceTablePanel extends JPanel {
 		JOptionPane.showMessageDialog (this, "Invalid URL: " + url, "Edit thing? ", JOptionPane.ERROR_MESSAGE);
 	}
 
-	private Object addNewService () {
+	private void addNewService () {
 		var sd = new StringTuple ("", "");
 
 		DialogUtils.showEditServiceDialog (this, sd, "Create new service");
 
 		if (sd.s1.equals ("") || sd.s2.equals (""))
-			return null;
+			return;
 
 		var newService = new Service (sd.s1, "", currentUser.getUserName ());
 		try {
 			newService.updateUrl (sd.s2);
 		} catch (MalformedURLException | URISyntaxException e) {
 			handleUrlException (sd.s2);
-			return null;
+			return;
 		}
 
 		addNewServiceToModel (newService);
-
-		return null;
 	}
 
 	private void addNewServiceToModel (Service newService) {
 		dbh.storeService (newService);
 		serviceTableModel.AddService (newService);
-		serviceTable.updateUI ();
+		updateTable ();
+	}
+
+	private void removeSelectedService () {
+		if (serviceTable.getSelectedRow () == -1) {
+			DialogUtils.showMessageDialog (this, "No service selected", "Edit service");
+			return;
+		}
+
+		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
+		serviceTableModel.removeService (service);
+		dbh.removeService (service);
+		updateTable ();
 	}
 
 	private Object manuallyTestSelectedService () {
@@ -142,7 +160,7 @@ public class ServiceTablePanel extends JPanel {
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
 		HTTPUtils.testSingleService (service);
-		serviceTable.updateUI ();
+		updateTable ();
 		return null;
 	}
 
