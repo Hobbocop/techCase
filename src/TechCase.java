@@ -1,14 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.awt.*;
+import java.util.stream.Collectors;
+
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class TechCase {
-	static User currentUser;
-	static List<User> allUsers;
-	static List<Service> services;
 
 	public static void main (String[] args) {
 		// [MAYBE]  TODO - add support for I18n handling
@@ -16,8 +13,12 @@ public class TechCase {
 		// A new text file with entries for all different languages
 		System.out.println ("Hello world!");
 
-		init ();
+		// Initialize and load all data
+		List<User> allUsers = fetchAllUsers ();  // TODO - Open up a "loading" dialog while loading stuff from server
+		User currentUser = logIn (allUsers);
+		List<Service> services = fetchAllServices (allUsers, currentUser);
 
+		// If we were unable to log in - just close the program. This shouldn't really happen...
 		if (currentUser == null) {
 			System.out.println ("No user found");
 			return;
@@ -26,15 +27,9 @@ public class TechCase {
 		// TODO [In progress] - add GUI features 
 		// TODO - add http request support to test services
 		// TODO - add database support
-		run ();
-	}
 
-	// Will initialize everything, load all data from database and also log in current user
-	private static void init () {
-		// TODO - Open up a "loading" dialog while loading stuff from server 
-		allUsers = fetchAllUsers ();
-		services = fetchAllServices ();
-		currentUser = logIn ();
+		// Start the program!
+		run (services, currentUser);
 	}
 
 	// Load all stored users from database
@@ -47,19 +42,7 @@ public class TechCase {
 		return allUsers;
 	}
 
-	private static List<Service> fetchAllServices () {
-		// TODO - Currently just setting up a test-set of users
-		// TODO - should instead load from database
-		List<Service> tmp = new ArrayList<> ();
-		tmp.add (new Service ("1", "1", null));
-		tmp.add (new Service ("2", "2", allUsers.get (1)));
-		tmp.add (new Service ("Test ok", "https://www.google.com", allUsers.get (0)));
-		tmp.add (new Service ("Test not ok", "https://www.probablyNotAnAddressThatExists.com",
-		                      allUsers.get (0)));
-		return tmp;
-	}
-
-	private static User logIn () {
+	private static User logIn (List<User> allUsers) {
 		// TODO - create a Swing dialog that asks for username and password (maybe not closing until logged in)
 		String userName = "AdminFilip";
 		String rawPassword = "123"; // TODO - should be hashed!!
@@ -70,19 +53,25 @@ public class TechCase {
 		return null;
 	}
 
-	private static void run () {
+	private static List<Service> fetchAllServices (List<User> allUsers, User user) {
+		// TODO - Currently just setting up a test-set of users
+		// TODO - should instead load from database
+		List<Service> tmp = new ArrayList<> ();
+		tmp.add (new Service ("1", "1", null));
+		tmp.add (new Service ("2", "2", allUsers.get (1)));
+		tmp.add (new Service ("Test ok", "https://www.google.com", allUsers.get (0)));
+		tmp.add (new Service ("Test not ok", "https://www.probablyNotAnAddressThatExists.com",
+		                      allUsers.get (0)));
+
+		return tmp.stream ().filter (s -> s.shouldShowFor (user)).collect (Collectors.toList ());
+	}
+
+	private static void run (List<Service> services, User currentUser) {
 		// TODO - this should be moved to a separate class, maybe a KryFrame?
 		// TODO - The frame should contain a panel, which in turns contains a Table (of all services) and buttons
-		JFrame frame = new JFrame ("Kry tech case");
-		frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-
-		// Create a temporary label so we have something in the window...
-		JLabel emptyLabel = new JLabel ("Logged in as: " + currentUser);
-		emptyLabel.setPreferredSize (new Dimension (800, 800));
-		frame.getContentPane ().add (emptyLabel, BorderLayout.CENTER);
+		JFrame frame = new ServiceFrame ("Kry tech case", services, currentUser);
 
 		// Open/Show the frame
-		frame.pack ();
 		frame.setVisible (true);
 	}
 
