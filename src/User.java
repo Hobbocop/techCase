@@ -7,9 +7,10 @@ public class User {
 	// but in this small system there are only super users and normal users
 	boolean isAdmin;
 
-	public User (String userName, String hashedPassword, boolean isAdmin) {
+	public User (String userName, String rawPassword, boolean isAdmin) {
 		this.userName = userName;
-		this.hashedPassword = hashedPassword;
+		// TODO - hash password somehow
+		this.hashedPassword = rawPassword;
 		this.isAdmin = isAdmin;
 	}
 
@@ -17,17 +18,21 @@ public class User {
 		return userName;
 	}
 
+	public String getHashedPassword () {
+		return hashedPassword;
+	}
+
 	public boolean isAdmin () {
 		return isAdmin;
 	}
 
-	boolean verify (String enteredUserName, String enteredPassword) {
+	boolean verify (String enteredUserName, String rawPassword) {
 		boolean verified = userName.equals (enteredUserName);
 
 		// TODO - use the hashing algorithm to hash the entered password, potentionally not here...
-		// TODO - tmp = hash(enteredPassword);
+		// TODO - enteredPassword = hash (rawPassword);
 
-		verified &= hashedPassword.equals (enteredPassword);
+		verified &= hashedPassword.equals (rawPassword);
 
 		return verified;
 	}
@@ -49,5 +54,9 @@ public class User {
 	// Because the user is same if username is same, the hashcode should depend on username as well
 	@Override public int hashCode () {
 		return userName.hashCode ();
+	}
+
+	@Override public String toString () {
+		return userName;
 	}
 }

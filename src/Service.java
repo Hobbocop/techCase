@@ -24,8 +24,7 @@ public class Service {
 
 	// Users should only be able to see their own services, admins should be able to see all!
 	public boolean shouldShowFor (User currentUser) {
-		// TODO - Admins should be able to see all, add this specific 
-		return user == null || user.isAdmin () || user.equals(currentUser);
+		return user == null || user.isAdmin () || user.equals (currentUser);
 	}
 
 	public Optional<Timestamp> getLastModified () {
