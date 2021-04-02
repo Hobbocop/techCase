@@ -33,10 +33,13 @@ public class ServiceTableModel extends AbstractTableModel {
 		System.out.println (services);
 	}
 
+	// This method is called by the JTable to figure out what should be written in each cell.
+	// This is the method that's used to explain how a list of services becomes a bunch of cells
 	@Override public Object getValueAt (int row, int column) {
 		var tmp = services.get (row);
 
-		//This is ugly, but it works and it's easy to code... Sorry...
+		// This isn't the prettiest method of converting a Service into a bunch of columns, but I can't figure
+		// out a better method right now.
 		switch (column) {
 			case 0:
 				return tmp.getName ();
@@ -56,6 +59,8 @@ public class ServiceTableModel extends AbstractTableModel {
 		}
 	}
 
+	// Timestamps are the underlying database type, they shouldn't be shown to the user.
+	// This method [will] format them to look nicer.
 	private Object handleTimeStamp (Timestamp time) {
 		if (time == null)
 			return "-";
@@ -74,10 +79,12 @@ public class ServiceTableModel extends AbstractTableModel {
 		return columnNames[column];
 	}
 
+	// There will always be one row per service
 	@Override public int getRowCount () {
 		return services.size ();
 	}
 
+	// Columncount is defined by columnNames
 	@Override public int getColumnCount () {
 		return columnNames.length;
 	}
