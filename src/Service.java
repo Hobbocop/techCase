@@ -56,7 +56,7 @@ public class Service {
 		return u.toURI ().toString ();
 	}
 
-	public void setLastResponse (boolean response) {
+	public void updateLastResponse (boolean response) {
 		lastResponseOk = response;
 		lastModified = new Timestamp (System.currentTimeMillis ());
 	}

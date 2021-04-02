@@ -135,6 +135,11 @@ public class ServiceTablePanel extends JPanel {
 	private Object manuallyTestSelectedService () {
 		// TODO - manually perform a http test for the selected service
 		System.out.println ("Test service in row " + serviceTable.getSelectedRow ());
+
+		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
+
+		service.updateLastResponse (HTTPUtils.testSingleService (service));
+		serviceTable.updateUI ();
 		return null;
 	}
 

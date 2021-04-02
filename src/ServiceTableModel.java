@@ -48,7 +48,7 @@ public class ServiceTableModel extends AbstractTableModel {
 			case 2:
 				var response = tmp.getLastResponseOk ();
 				if (response.isPresent ())
-					return response.get ();
+					return formatResponse (response.get ());
 				return "-";
 			case 3:
 				return handleTimeStamp (tmp.getCreatedTimeStamp ());
@@ -59,6 +59,7 @@ public class ServiceTableModel extends AbstractTableModel {
 		}
 	}
 
+
 	// Timestamps are the underlying database type, they shouldn't be shown to the user.
 	// This method [will] format them to look nicer.
 	private Object handleTimeStamp (Timestamp time) {
@@ -67,6 +68,12 @@ public class ServiceTableModel extends AbstractTableModel {
 
 		//TODO - format this to look pretty... Maybe even convert to Date or some such
 		return time;
+	}
+
+	private Object formatResponse (Boolean response) {
+		if (response)
+			return "OK";
+		return "FAIL";
 	}
 
 	// None of the cells should be editable...
