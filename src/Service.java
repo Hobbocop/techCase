@@ -1,3 +1,6 @@
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Optional;
 
@@ -6,7 +9,7 @@ public class Service {
 	private String url;
 	private User user;
 	private Timestamp lastModified;
-	private boolean lastResponseOk;
+	private Boolean lastResponseOk;
 	private Timestamp created;
 
 	// Constructor for newly created Services, creating a time-stamp when they are created
@@ -20,14 +23,30 @@ public class Service {
 		this.url = url;
 		this.user = user;
 		this.created = created;
+		this.lastResponseOk = null;
 	}
 
 	public String getName () {
 		return serviceName;
 	}
 
+	public void updateName (String newName) {
+		this.serviceName = newName;
+	}
+
 	public String getUrl () {
 		return url;
+	}
+
+	public void updateUrl (String newUrl) throws MalformedURLException, URISyntaxException {
+		// TODO - for the actual release, should verity email bfore updating!!!
+		// this.url = verify (newUrl);
+		this.url = newUrl;
+	}
+
+	private String verify (String newUrl) throws MalformedURLException, URISyntaxException {
+		URL u = new URL (url);
+		return u.toURI ().toString ();
 	}
 
 	public void setLastResponse (boolean response) {
@@ -36,7 +55,7 @@ public class Service {
 	}
 
 	public Optional<Boolean> getLastResponseOk () {
-		return Optional.of (lastResponseOk);
+		return Optional.ofNullable (lastResponseOk);
 	}
 
 	public Timestamp getCreatedTimeStamp () {
@@ -46,6 +65,7 @@ public class Service {
 	public Timestamp getLastModifiedTimeStamp () {
 		return lastModified;
 	}
+
 	// Users should only be able to see their own services, admins should be able to see all!
 	public boolean shouldShowFor (User currentUser) {
 		return user == null || user.isAdmin () || user.equals (currentUser);

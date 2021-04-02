@@ -17,8 +17,13 @@ public class ServiceTableModel extends AbstractTableModel {
 		this.columnNames = columnNames;
 	}
 
+	public Service getService (int row) {
+		return services.get (row);
+	}
+
 	public void AddService (Service service) {
 		services.add (service);
+		System.out.println (services);
 	}
 
 	@Override public Object getValueAt (int row, int column) {
@@ -38,7 +43,7 @@ public class ServiceTableModel extends AbstractTableModel {
 			case 3:
 				return handleTimeStamp (tmp.getCreatedTimeStamp ());
 			case 4:
-				return tmp.getUrl();
+				return tmp.getUrl ();
 			default:
 				return "-";
 		}
@@ -47,6 +52,8 @@ public class ServiceTableModel extends AbstractTableModel {
 	private Object handleTimeStamp (Timestamp time) {
 		if (time == null)
 			return "-";
+
+		//TODO - format this to look pretty... Maybe even convert to Date or some such
 		return time;
 	}
 

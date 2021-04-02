@@ -4,7 +4,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+/**
+ * Main class for code test.
+ * 
+ * Author: Filip Bark
+ */
 public class TechCase {
 
 	public static void main (String[] args) {
@@ -14,7 +23,7 @@ public class TechCase {
 		System.out.println ("Hello world!");
 
 		// Initialize and load all data
-		List<User> allUsers = fetchAllUsers ();  // TODO - Open up a "loading" dialog while loading stuff from server
+		List<User> allUsers = fetchAllUsers ();
 		User currentUser = logIn (allUsers);
 		List<Service> services = fetchAllServices (allUsers, currentUser);
 
@@ -24,7 +33,6 @@ public class TechCase {
 			return;
 		}
 
-		// TODO [In progress] - add GUI features 
 		// TODO - add http request support to test services
 		// TODO - add database support
 
@@ -39,18 +47,33 @@ public class TechCase {
 		List<User> allUsers = new ArrayList<> ();
 		allUsers.add (new User ("AdminFilip", "123", true));
 		allUsers.add (new User ("NonAdminFilip", "321", false));
+		allUsers.add (new User ("1", "1", true));
 		return allUsers;
 	}
 
 	private static User logIn (List<User> allUsers) {
-		// TODO - create a Swing dialog that asks for username and password (maybe not closing until logged in)
-		String userName = "AdminFilip";
-		String rawPassword = "123"; // TODO - should be hashed!!
+		User currentUser = null;
+		StringTuple tmpUser;
+		while (currentUser == null) {
+			tmpUser = new StringTuple ("", "");
+			var choice = DialogUtils.showLoginDialog (null, tmpUser, "log in");
 
-		Optional<User> tmp = allUsers.stream ().filter (u -> u.verify (userName, rawPassword)).findAny ();
-		if (tmp.isPresent ())
-			return tmp.get ();
-		return null;
+			if (choice != JOptionPane.OK_OPTION)
+				return null;
+
+			String userName = tmpUser.s1;
+			String rawPassword = tmpUser.s2;
+
+			Optional<User> tmp =
+			                   allUsers.stream ().filter (u -> u.verify (userName, rawPassword)).findAny ();
+			if (tmp.isPresent ())
+				return tmp.get ();
+
+			DialogUtils.showMessageDialog (null, "Username or password was incorrect, try again", "log in");
+			System.out.println ("wat " + currentUser);
+		}
+
+		return currentUser;
 	}
 
 	private static List<Service> fetchAllServices (List<User> allUsers, User user) {
