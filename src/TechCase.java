@@ -11,13 +11,9 @@ import javax.swing.SwingUtilities;
  */
 public class TechCase {
 	private static final int THREAD_SLEEP_DURATION = 5000;
-	private static DataBaseHandler dbh;
 
 	public static void main (String[] args) {
 		System.out.println ("Hello world!");
-
-		// Set up data base handler
-		 dbh = new DataBaseHandler ();
 
 		// Initialize and load all data
 		List<User> allUsers = fetchAllUsers ();
@@ -38,7 +34,7 @@ public class TechCase {
 
 	// Load all stored users from database
 	private static List<User> fetchAllUsers () {
-		return dbh.selectAllUsers ();
+		return DataBaseUtils.selectAllUsers ();
 	}
 
 	private static User logIn (List<User> allUsers) {
@@ -68,11 +64,11 @@ public class TechCase {
 	}
 
 	private static List<Service> fetchAllServices (List<User> allUsers, User user) {
-		return dbh.selectAllServices ();
+		return DataBaseUtils.selectAllServices ();
 	}
 
 	private static void run (List<Service> services, User currentUser) {
-		ServiceFrame frame = new ServiceFrame ("Kry tech case", services, currentUser, dbh);
+		ServiceFrame frame = new ServiceFrame ("Kry tech case", services, currentUser);
 
 		// Open/Show the frame
 		frame.setVisible (true);

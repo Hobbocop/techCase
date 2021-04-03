@@ -13,20 +13,16 @@ import java.util.List;
  *
  * Author: Filip Bark
  */
-public class DataBaseHandler {
+public class DataBaseUtils {
 
-	private String url;
+	private static final String URL = "jdbc:sqlite:db/best.db";
 
-	public DataBaseHandler () {
-		url = "jdbc:sqlite:db/best.db";
-	}
-
-	public List<User> selectAllUsers () {
+	public static List<User> selectAllUsers () {
 		List<User> ret = new ArrayList<> ();
 
 		String sql = "select * from users";
 
-		try (Connection conn = this.connect ();
+		try (Connection conn = connect ();
 		     Statement stmt = conn.createStatement ();
 		     ResultSet rs = stmt.executeQuery (sql)) {
 			while (rs.next ())
@@ -40,12 +36,12 @@ public class DataBaseHandler {
 		return ret;
 	}
 
-	public List<Service> selectAllServices () {
+	public static List<Service> selectAllServices () {
 		List<Service> ret = new ArrayList<> ();
 
 		String sql = "select * from services";
 
-		try (Connection conn = this.connect ();
+		try (Connection conn = connect ();
 		     Statement stmt = conn.createStatement ();
 		     ResultSet rs = stmt.executeQuery (sql)) {
 			while (rs.next ())
@@ -60,11 +56,15 @@ public class DataBaseHandler {
 		return ret;
 	}
 
-	public void storeService (Service service) {
+	public static int getMaxServiceId () {
+		return 0;
+	}
+
+	public static void storeNewService (Service service) {
 		String sql = "insert into services(name, url, created_date, last_modified_date, created_by)" +
 		" VALUES(?,?,?,?,?)";
 
-		try (Connection conn = this.connect ();
+		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
 			pstmt.setString (1, service.getName ());
 			pstmt.setString (2, service.getUrl ());
@@ -78,11 +78,23 @@ public class DataBaseHandler {
 
 	}
 
-	private Connection connect () {
+	public static void updateService (Service service) {
+		// TODO - add a method to update Services... This requires some sort of ID for each service that won't get modified...
+	}
+
+	public static void removeService (Service service) {
+		// TODO - add a method to remove Services... This requires some sort of ID for each service that won't get modified...
+	}
+
+	public static int getMaxUserId () {
+		return 0;
+	}
+
+	private static Connection connect () {
 		Connection conn = null;
 
 		try {
-			conn = DriverManager.getConnection (url);
+			conn = DriverManager.getConnection (URL);
 			System.out.println ("Successfully connected to database");
 
 		} catch (SQLException e) {
@@ -91,17 +103,4 @@ public class DataBaseHandler {
 
 		return conn;
 	}
-
-	public void removeService (Service service) {
-		// TODO - add a method to remove Services... This requires some sort of ID for each service that won't get modified...
-	}
-
-	public void updateService (Service service) {
-		// TODO - add a method to update Services... This requires some sort of ID for each service that won't get modified...
-	}
-
-	public int getMaxServiceId () {
-		return 0;
-	}
-
 }

@@ -26,15 +26,13 @@ public class ServiceTablePanel extends JPanel {
 	private User currentUser;
 
 	private ServiceTableModel serviceTableModel;
-	private DataBaseHandler dbh;
 
-	public ServiceTablePanel (List<Service> services, User currentUser, DataBaseHandler dbh) {
+	public ServiceTablePanel (List<Service> services, User currentUser) {
 		super (new BorderLayout ());
 
 		setPreferredSize (new Dimension (800, 800));
 		periodicTestingPaused = false;
 		this.currentUser = currentUser;
-		this.dbh = dbh;
 
 		serviceTable = createTable (services);
 		add (new JScrollPane (serviceTable), BorderLayout.CENTER);
@@ -108,7 +106,7 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private void updateServiceInModel (Service service) {
-		dbh.updateService (service);
+		DataBaseUtils.updateService (service);
 		updateTable ();
 	}
 
@@ -137,7 +135,7 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private void addNewServiceToModel (Service newService) {
-		dbh.storeService (newService);
+		DataBaseUtils.storeNewService (newService);
 		serviceTableModel.AddService (newService);
 		updateTable ();
 	}
@@ -150,7 +148,7 @@ public class ServiceTablePanel extends JPanel {
 
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 		serviceTableModel.removeService (service);
-		dbh.removeService (service);
+		DataBaseUtils.removeService (service);
 		updateTable ();
 	}
 
