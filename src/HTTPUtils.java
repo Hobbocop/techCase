@@ -20,9 +20,8 @@ public class HTTPUtils {
 				con.connect ();
 
 				status = con.getResponseCode ();
-				System.out.println ("We got " + status);
+
 			} catch (IOException e) {
-				System.out.println ("Uh oh");
 				service.updateLastResponse (false);
 				return;
 			} finally {
