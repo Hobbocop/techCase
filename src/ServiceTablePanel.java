@@ -27,6 +27,14 @@ public class ServiceTablePanel extends JPanel {
 
 	private ServiceTableModel serviceTableModel;
 
+	private static final String EDIT_SERVICE_DIALOG_TITLE = "Edit selected service";
+	private static final String ADD_SERVICE_DIALOG_TITLE = "Add new service";
+	private static final String REMOVE_SERVICE_DIALOG_TITLE = "Remove selected service";
+	private static final String NO_SERVICE_MESSAGE = "No service selected";
+	private static final String MANUAL_TEST_MESSAGE = "Manually test selected service";
+	private static final String PAUSE_AUTO_TEST_MESSAGE = "Pause automatic testing";
+	private static final String RESUME_AUTO_TEST_MESSAGE = "Resume automatic testing";
+
 	public ServiceTablePanel (List<Service> services, User currentUser) {
 		super (new BorderLayout ());
 
@@ -58,23 +66,23 @@ public class ServiceTablePanel extends JPanel {
 	private JPanel createButtonPanel () {
 		JPanel buttonPanel = new JPanel ();
 
-		JButton editServiceButton = new JButton ("Edit selected service");
+		JButton editServiceButton = new JButton (EDIT_SERVICE_DIALOG_TITLE);
 		editServiceButton.addActionListener (e -> editSelectedService ());
 		buttonPanel.add (editServiceButton);
 
-		JButton addServiceButton = new JButton ("Add new service");
+		JButton addServiceButton = new JButton (ADD_SERVICE_DIALOG_TITLE);
 		addServiceButton.addActionListener (e -> addNewService ());
 		buttonPanel.add (addServiceButton);
 
-		JButton deleteServiceButton = new JButton ("Remove selected service");
+		JButton deleteServiceButton = new JButton (REMOVE_SERVICE_DIALOG_TITLE);
 		deleteServiceButton.addActionListener (e -> removeSelectedService ());
 		buttonPanel.add (deleteServiceButton);
 
-		JButton testServiceButton = new JButton ("Manually test service");
+		JButton testServiceButton = new JButton (MANUAL_TEST_MESSAGE);
 		testServiceButton.addActionListener (e -> manuallyTestSelectedService ());
 		buttonPanel.add (testServiceButton);
 
-		JButton toggleAutomaticTesting = new JButton ("Pause automatic testing");
+		JButton toggleAutomaticTesting = new JButton (PAUSE_AUTO_TEST_MESSAGE);
 		toggleAutomaticTesting.addActionListener (e -> toggleAutomaticTesting (toggleAutomaticTesting));
 		buttonPanel.add (toggleAutomaticTesting);
 
@@ -83,7 +91,7 @@ public class ServiceTablePanel extends JPanel {
 
 	private void editSelectedService () {
 		if (serviceTable.getSelectedRow () == -1) {
-			DialogUtils.showMessageDialog (this, "No service selected", "Edit service");
+			DialogUtils.showMessageDialog (this, NO_SERVICE_MESSAGE, EDIT_SERVICE_DIALOG_TITLE);
 			return;
 		}
 
@@ -91,7 +99,7 @@ public class ServiceTablePanel extends JPanel {
 
 		var st = new StringTuple (service.getName (), service.getUrl ());
 
-		DialogUtils.showEditServiceDialog (this, st, "Edit service");
+		DialogUtils.showEditServiceDialog (this, st, EDIT_SERVICE_DIALOG_TITLE);
 
 		try {
 			service.updateName (st.s1);
@@ -112,13 +120,14 @@ public class ServiceTablePanel extends JPanel {
 
 	private void handleUrlException (String url) {
 		System.out.println ("Invalid URL: " + url);
-		JOptionPane.showMessageDialog (this, "Invalid URL: " + url, "Edit thing? ", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog (this, "Invalid URL: " + url, EDIT_SERVICE_DIALOG_TITLE,
+					       JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void addNewService () {
 		var sd = new StringTuple ("", "");
 
-		DialogUtils.showEditServiceDialog (this, sd, "Create new service");
+		DialogUtils.showEditServiceDialog (this, sd, ADD_SERVICE_DIALOG_TITLE);
 
 		if (sd.s1.equals ("") || sd.s2.equals (""))
 			return;
@@ -142,7 +151,7 @@ public class ServiceTablePanel extends JPanel {
 
 	private void removeSelectedService () {
 		if (serviceTable.getSelectedRow () == -1) {
-			DialogUtils.showMessageDialog (this, "No service selected", "Edit service");
+			DialogUtils.showMessageDialog (this, NO_SERVICE_MESSAGE, REMOVE_SERVICE_DIALOG_TITLE);
 			return;
 		}
 
@@ -153,8 +162,6 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private Object manuallyTestSelectedService () {
-		System.out.println ("Test service in row " + serviceTable.getSelectedRow ());
-
 		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
 		HTTPUtils.testSingleService (service);
@@ -165,10 +172,10 @@ public class ServiceTablePanel extends JPanel {
 	private Object toggleAutomaticTesting (JButton srcButton) {
 		if (!periodicTestingPaused) {
 			periodicTestingPaused = true;
-			srcButton.setText ("Resume automatic testing");
+			srcButton.setText (RESUME_AUTO_TEST_MESSAGE);
 		} else {
 			periodicTestingPaused = false;
-			srcButton.setText ("Pause automatic testing");
+			srcButton.setText (PAUSE_AUTO_TEST_MESSAGE);
 		}
 
 		return true;

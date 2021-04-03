@@ -30,7 +30,7 @@ public class DataBaseUtils {
 				                   rs.getInt ("admin") == 1, rs.getInt ("id")));
 
 		} catch (SQLException e) {
-			System.out.println (e.getMessage ());
+			e.printStackTrace ();
 		}
 
 		return ret;
@@ -53,7 +53,7 @@ public class DataBaseUtils {
 					maxId = tmpId;
 			}
 		} catch (SQLException e) {
-				System.out.println (e.getMessage ());
+			e.printStackTrace ();
 		}
 		return maxId;
 	}
@@ -71,7 +71,7 @@ public class DataBaseUtils {
 				                      rs.getString ("created_by"), rs.getString ("created_date"),
 				                      rs.getString ("last_modified_date"), rs.getInt ("id")));
 		} catch (SQLException e) {
-			System.out.println (e.getMessage ());
+			e.printStackTrace ();
 		}
 
 		return ret;
@@ -79,7 +79,7 @@ public class DataBaseUtils {
 
 	public static void storeNewService (Service service) {
 		String sql = "insert into services(name, url, created_date, last_modified_date, created_by, id)" +
-		" VALUES(?,?,?,?,?,?)";
+			     " VALUES(?,?,?,?,?,?)";
 
 		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql);) {
@@ -91,7 +91,7 @@ public class DataBaseUtils {
 			pstmt.setInt (6, service.getId ());
 			pstmt.executeUpdate ();
 		} catch (SQLException e) {
-			System.out.println (e.getMessage ());
+			e.printStackTrace ();
 		}
 	}
 
@@ -101,11 +101,30 @@ public class DataBaseUtils {
 	}
 
 	public static void updateService (Service service) {
-		// TODO - add a method to update Services...
+		String sql = "update services set name = ?, url = ?, last_modified_date = ? where id = ?";
+
+		try (Connection conn = connect ();
+		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
+			pstmt.setString (1, service.getName ());
+			pstmt.setString (2, service.getUrl ());
+			pstmt.setString (3, service.getLastModifiedTime ());
+			pstmt.setInt (4, service.getId ());
+			pstmt.executeUpdate ();
+		} catch (SQLException e) {
+			e.printStackTrace ();
+		}
 	}
 
 	public static void removeService (Service service) {
-		// TODO - add a method to remove Services...
+		String sql = "delete from services where id = ?";
+
+		try (Connection conn = connect ();
+		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
+			pstmt.setInt (1, service.getId ());
+			pstmt.executeUpdate ();
+		} catch (SQLException e) {
+			System.out.println (e.getMessage ());
+		}
 	}
 
 	private static Connection connect () {
@@ -113,7 +132,6 @@ public class DataBaseUtils {
 
 		try {
 			conn = DriverManager.getConnection (URL);
-			System.out.println ("Successfully connected to database");
 
 		} catch (SQLException e) {
 			e.printStackTrace ();

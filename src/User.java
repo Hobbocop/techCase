@@ -1,7 +1,6 @@
 
 public class User {
 	private String userName;
-	// Todo - should obviously never store the user password in clear text... Always use and store hashed versions
 	private String hashedPassword;
 	// Normally, this shouldn't be a boolean - but probably an enum saying which level of rights this user has
 	// but in this small system there are only super users and normal users
@@ -9,13 +8,13 @@ public class User {
 	private int id;
 
 	public User (String userName, String rawPassword, boolean isAdmin) {
-		this (userName, rawPassword, isAdmin, generateNewId ());
+		this (userName, MyStringUtils.hashPassword (rawPassword), isAdmin, generateNewId ());
 	}
 
-	public User (String userName, String rawPassword, boolean isAdmin, int id) {
+	public User (String userName, String hashedPassword, boolean isAdmin, int id) {
 		this.userName = userName;
 		// TODO - hash password somehow
-		this.hashedPassword = rawPassword;
+		this.hashedPassword = hashedPassword;
 		this.isAdmin = isAdmin;
 	}
 

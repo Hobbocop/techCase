@@ -48,10 +48,11 @@ public class TechCase {
 				return null;
 
 			String userName = tmpUser.s1;
-			String rawPassword = tmpUser.s2;
+			String pwd = MyStringUtils.hashPassword (tmpUser.s2);
+			System.out.println(tmpUser.s2 + " -> " + pwd);
 
 			Optional<User> tmp =
-					   allUsers.stream ().filter (u -> u.verify (userName, rawPassword)).findAny ();
+					   allUsers.stream ().filter (u -> u.verify (userName, pwd)).findAny ();
 
 			// If we managed to find the user - let's return it and "log in" as that user
 			if (tmp.isPresent ())

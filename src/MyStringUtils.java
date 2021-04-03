@@ -12,6 +12,9 @@ public class MyStringUtils {
 		return formatter.format (tmp);
 	}
 
-	// TODO - add a HashMethod for password handling!
+	public static String hashPassword (String rawPassword) {
+		// TODO - do something a bit more.. fancy here?
+		return String.valueOf (rawPassword.hashCode ());
+	}
 
 }
