@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import kry.DataBaseUtils;
 import kry.HTTPUtils;
+import kry.MyStringUtils;
 import kry.Service;
 import kry.User;
 
@@ -16,23 +17,30 @@ import kry.User;
  * Ideally, there should be a rollback in the database once all tests are done...
  * But that's beyond my abilities right now.<br><br>
  *
+ * This will become an issue because the database tests are now dependant on another. If the creation test fails,
+ * there is no way to test edit or deletion.<br><br>
+ *
+ * Normally, I'd want these tests to be run in a vacuum. Where each test would set up whatever it needs in the database
+ * and then start testing. Previous tests shouldn't have any effect on the current test. Oh well...<br><br>
+ *
  * Author: Filip Bark
  * </pre>
 */
-
 public class TestTechCase {
 
         public static void main (String[] args) {
                 System.out.println ("Hello world, let's test the TechCase and see if it works!");
 
                 int totalTestPassed = 0;
-                int dbTests = 6; // TODO - update this to final amount of tests
+                int dbTests = 6; // Hardcoded - yay!
                 int dbTestPassed = testDatabase ();
+                totalTestPassed += dbTestPassed;
                 if (dbTestPassed != dbTests)
                         System.out.println ("ERROR: Not all db tests passed!");
 
-                int utilTests = 4; // TODO - update this to the final amount of tests;
+                int utilTests = 5; // Hardcoded - yay!
                 int utilsTestPassed = testUtils ();
+                totalTestPassed += utilsTestPassed;
                 if (utilsTestPassed != utilTests)
                         System.out.println ("ERROR: Not all util tests passed!");
 
@@ -196,12 +204,35 @@ public class TestTechCase {
                 int passedTests = 0;
                 passedTests += testStringUtils ();
                 passedTests += testHttpUtils ();
-                System.out.println (passedTests + "/4 util tests passed");
+                System.out.println (passedTests + "/5 util tests passed");
                 return passedTests;
         }
 
         private static int testStringUtils () {
-                return 0;
+                int passedTests = 0;
+
+                String passWord = "password";
+                String anotherWord = "password1";
+
+                String hash1 = MyStringUtils.hashPassword (passWord);
+                String hash2 = MyStringUtils.hashPassword (anotherWord);
+                String hash3 = MyStringUtils.hashPassword ("password");
+
+                // A small change in the password should lead to a different hash. But the same word should always have
+                // the same hash.
+                if (hash1.equals (hash3) && !hash1.equals (hash2))
+                        passedTests++;
+
+                // Testing url verification with what I think is good url and bad url (in no way exhaustive)
+                var badUrl = MyStringUtils.verifyUrl ("a bad url");
+                var goodUrl = MyStringUtils.verifyUrl ("https://www.good.url.com");
+
+                if (!badUrl)
+                        passedTests++;
+                if (goodUrl)
+                        passedTests++;
+
+                return passedTests;
         }
 
         private static int testHttpUtils () {

@@ -32,7 +32,6 @@ public class MyStringUtils {
 	public static boolean verifyUrl (String newUrl) {
 		Pattern p = Pattern.compile (URL_REGEX);
 		Matcher m = p.matcher (newUrl);
-		System.out.println (newUrl + " -> " + m.matches ());
 		return m.matches ();
 	}
 
