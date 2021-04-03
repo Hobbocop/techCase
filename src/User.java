@@ -15,10 +15,11 @@ public class User {
 		this.userName = userName;
 		this.hashedPassword = hashedPassword;
 		this.isAdmin = isAdmin;
+		this.id = id;
 	}
 
 	private static int generateNewId () {
-		var tmp = DataBaseUtils.getMaxUserId ();
+		var tmp = DataBaseUtils.getMaxUserId () + 1;
 		System.out.println ("Generating new userId: " + tmp);
 		return tmp;
 	}
@@ -27,8 +28,16 @@ public class User {
 		return userName;
 	}
 
+	public void updateUserName (String newName) {
+		this.userName = newName;
+	}
+
 	public String getHashedPassword () {
 		return hashedPassword;
+	}
+
+	public void updatePassword (String newPassword) {
+		this.hashedPassword = MyStringUtils.hashPassword (newPassword);
 	}
 
 	public boolean isAdmin () {
@@ -48,6 +57,7 @@ public class User {
 
 	// For a user, if the username is the same - it's the same user!
 	@Override public boolean equals (Object obj) {
+		// TODO - should actually not check the name - but rather the ID!!!
 		if (obj == null)
 			return false;
 
@@ -67,6 +77,10 @@ public class User {
 
 	@Override public String toString () {
 		return userName;
+	}
+
+	public void setAdmin (boolean setAdmin) {
+		this.isAdmin = setAdmin;
 	}
 
 }

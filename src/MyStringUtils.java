@@ -13,7 +13,7 @@ public class MyStringUtils {
 	}
 
 	public static String hashPassword (String rawPassword) {
-		// TODO - do something a bit more.. fancy here?
+		// Just a symbolic hash. Would normally do something more impressive...
 		return String.valueOf (rawPassword.hashCode ());
 	}
 

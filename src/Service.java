@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Service {
 	private String serviceName;
 	private String url;
-	private String user;
+	private String user; // TODO - this shouldn't be user name but rather userId (name can change, id can not)
 	private String lastModified; // Normally this would be Dates/Timestamps/Instants, but sqlite doesn't handle dates
 	private String created; // Normally this would be Dates/Timestamps/Instants, but sqlite doesn't handle dates
 	private Boolean lastResponseOk;

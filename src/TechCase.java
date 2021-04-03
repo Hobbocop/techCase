@@ -2,7 +2,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -20,8 +19,6 @@ public class TechCase {
 		List<User> allUsers = fetchAllUsers ();
 		User currentUser = logIn (allUsers);
 
-		// TODO - add a dialog/panel for managing users...
-
 		// If we were unable to log in - just close the program. This shouldn't really happen...
 		if (currentUser == null)
 			return;
@@ -29,7 +26,7 @@ public class TechCase {
 		List<Service> services = fetchAllServices (allUsers, currentUser);
 
 		// Start the program!
-		run (services, currentUser);
+		run (services, currentUser, allUsers);
 	}
 
 	// Load all stored users from database
@@ -44,7 +41,7 @@ public class TechCase {
 			tmpUser = new StringTuple ("", "");
 			var choice = DialogUtils.showLoginDialog (null, tmpUser, "log in");
 
-			if (choice != JOptionPane.OK_OPTION)
+			if (DialogUtils.choiceNotOk (choice))
 				return null;
 
 			String userName = tmpUser.s1;
@@ -69,8 +66,8 @@ public class TechCase {
 		return allServices.stream ().filter (s -> s.shouldShowFor (user)).collect (Collectors.toList ());
 	}
 
-	private static void run (List<Service> services, User currentUser) {
-		ServiceFrame frame = new ServiceFrame ("Kry tech case", services, currentUser);
+	private static void run (List<Service> services, User currentUser, List<User> allUsers) {
+		ServiceFrame frame = new ServiceFrame ("Kry Service status manager", services, currentUser, allUsers);
 
 		// Open/Show the frame
 		frame.setVisible (true);

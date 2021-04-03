@@ -27,7 +27,7 @@ public class ServiceTableModel extends AbstractTableModel {
 		return services.get (row);
 	}
 
-	public void AddService (Service service) {
+	public void addService (Service service) {
 		services.add (service);
 	}
 

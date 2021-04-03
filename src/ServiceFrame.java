@@ -1,4 +1,8 @@
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -20,9 +24,13 @@ public class ServiceFrame extends JFrame {
 
 	private ServiceTablePanel serviceTablePanel;
 	private JTextField statusTextField;
+	private List<User> allUsers;
 
-	public ServiceFrame (String title, List<Service> services, User currentUser) {
+	public ServiceFrame (String title, List<Service> services, User currentUser, List<User> allUsers) {
 		super (title);
+		this.currentUser = currentUser;
+		this.allUsers = allUsers;
+
 		setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
 		serviceTablePanel = new ServiceTablePanel (services, currentUser);
@@ -32,7 +40,30 @@ public class ServiceFrame extends JFrame {
 		statusTextField.setEditable (false);
 		getContentPane ().add (statusTextField, BorderLayout.SOUTH);
 
+		setJMenuBar (createMenuBar ());
 		pack ();
+	}
+
+	private JMenuBar createMenuBar () {
+		JMenuBar menuBar = new JMenuBar ();
+		JMenu menu = new JMenu ("File");
+
+		// For now, the file menu will only have one button
+		JMenuItem editUser = new JMenuItem ("Edit users...");
+		editUser.setToolTipText ("Open a new dialog for editing users");
+		editUser.addActionListener (e -> openUserManager ());
+		menu.add (editUser);
+		menuBar.add (menu);
+		return menuBar;
+	}
+
+	private void openUserManager () {
+		EditUserPanel panel = new EditUserPanel (currentUser, allUsers);
+
+		JDialog dialog = new JDialog (this);
+		dialog.getContentPane ().add (panel);
+		dialog.pack ();
+		dialog.setVisible (true);
 	}
 
 	public ServiceTablePanel getServicePanel () {

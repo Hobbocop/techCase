@@ -61,6 +61,7 @@ public class DataBaseUtils {
 	public static void storeNewUser (User newUser) {
 		String sql = "insert into users (name, pwd, admin, id) values (?,?,?,?)";
 
+		System.out.println ("Creating new user with id: "+newUser.getId());
 		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql);) {
 			pstmt.setString (1, newUser.getUserName ());
@@ -75,7 +76,8 @@ public class DataBaseUtils {
 
 	public static void updateUser (User user) {
 		String sql = "update users set name = ?, pwd = ?, admin = ? where id = ?";
-
+		// TODO - this isn't working.. but it should???
+		System.out.println ("Updating user!!");
 		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
 			pstmt.setString (1, user.getUserName ());

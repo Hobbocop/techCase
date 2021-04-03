@@ -145,7 +145,7 @@ public class ServiceTablePanel extends JPanel {
 
 	private void addNewServiceToModel (Service newService) {
 		DataBaseUtils.storeNewService (newService);
-		serviceTableModel.AddService (newService);
+		serviceTableModel.addService (newService);
 		updateTable ();
 	}
 
