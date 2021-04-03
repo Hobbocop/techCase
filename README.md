@@ -1,6 +1,8 @@
 # techCase
 Testcase for Kry,
 
+Dependencies: Java 11, sqlite (only if you want to manually check the database)
+
 author: Filip Bark (fbark@kth.se)
 
 # How to run:
@@ -32,3 +34,19 @@ Additionally, there are 4 util classes:
 - DialogUtils - contains methods for opening small dialogs
 - DataBaseUtils - contains all methods that access the database.
 - MyStringUitls - contains methods for parsing/hashing/checking strings
+
+# Database
+The database has 2 tables:
+- Users with 4 fields:
+  - Name (string) - name of the user
+  - Pwd (hashed string) - For security reasons we're not storing password as the user entered it.
+  - Admin (int, 0 or 1) - Sqlite doesn't handle booleans, but we can just check whether it's 1 or not.
+  - id (int) - a uniqiue identifier for a user, every new user will get max(id)+1. (Id's will not be reused when delete users, just keep using the largest+1)
+
+- Services with 6 fields:
+  - Name (string) - Name of the service
+  - Url (string) - Url for the service, there is a small check when this is added so that most nonsensical urls won't get added.
+  - created_date (string) - Sqlite doesn't handle dates, so the timestamps get formatted to strings. When was the service created?
+  - last_modified_date (string) - Sqlite doesn't handle dates, so the timestamps get formatted to strings. When was the service last modified?
+  - created_by (int) - The id of the User that created this service. (Services can only be seen by their owners or Admins)
+  - id (int) - a uniqiue identifier for this service, every new service will get max(id)+1.
