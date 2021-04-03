@@ -30,13 +30,11 @@ java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.TechCase
 ```
 
 # How to test
-First, you need to manually compile the code as written above.
-
-Then you need to compile the junit test (not actual junit, just a separate java class that will test all files) 
+First you need to compile the test files this is not an actual junit test, just a separate java class that will test all files:
 ```
-javac -d bin src/kry/junit/*.java
+javac -d bin src/kry/junit/*.java src/kry/*.java
 ```
-This can then be run (in terminal, for the output, sorry) with:
+The test can then be run in terminal (for the output, sorry) with:
 ```
 java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.junit.TestTechCase
 ```
