@@ -55,9 +55,8 @@ public class User {
 		return verified;
 	}
 
-	// For a user, if the username is the same - it's the same user!
+	// For a user, if the id is the same - it's the same user!
 	@Override public boolean equals (Object obj) {
-		// TODO - should actually not check the name - but rather the ID!!!
 		if (obj == null)
 			return false;
 
@@ -65,14 +64,15 @@ public class User {
 			return true;
 
 		if (obj instanceof User)
-			return userName.equals (((User) obj).getUserName ());
+			return id == ((User) obj).getId ();
 
 		return false;
 	}
 
 	// Because the user is same if username is same, the hashcode should depend on username as well
 	@Override public int hashCode () {
-		return userName.hashCode ();
+		// ints don't require hashing but can be consider a (very simple) hash by themselves
+		return id;
 	}
 
 	@Override public String toString () {

@@ -132,7 +132,7 @@ public class ServiceTablePanel extends JPanel {
 		if (sd.s1.equals ("") || sd.s2.equals (""))
 			return;
 
-		var newService = new Service (sd.s1, "", currentUser.getUserName ());
+		var newService = new Service (sd.s1, "", currentUser.getId ());
 		try {
 			newService.updateUrl (sd.s2);
 		} catch (MalformedURLException | URISyntaxException e) {

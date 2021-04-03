@@ -13,22 +13,22 @@ import java.util.Optional;
 public class Service {
 	private String serviceName;
 	private String url;
-	private String user; // TODO - this shouldn't be user name but rather userId (name can change, id can not)
+	private int userId;
 	private String lastModified; // Normally this would be Dates/Timestamps/Instants, but sqlite doesn't handle dates
 	private String created; // Normally this would be Dates/Timestamps/Instants, but sqlite doesn't handle dates
 	private Boolean lastResponseOk;
 	private final int id; // Id can't be null, so using int instead of Int
 
 	// Constructor for newly created Services, creating a time-stamp when they are created
-	public Service (String name, String url, String user) {
-		this (name, url, user, MyStringUtils.getNow (), null, generateNewId ());
+	public Service (String name, String url, int userId) {
+		this (name, url, userId, MyStringUtils.getNow (), null, generateNewId ());
 	}
 
 	// Constructor for stored Services that already have a timestamp
-	public Service (String name, String url, String user, String created, String lastModified, int id) {
+	public Service (String name, String url, int userId, String created, String lastModified, int id) {
 		this.serviceName = name;
 		this.url = url;
-		this.user = user;
+		this.userId = userId;
 		this.created = created;
 		this.lastModified = lastModified;
 		lastResponseOk = null;
@@ -52,8 +52,8 @@ public class Service {
 		return url;
 	}
 
-	public String getCreatedBy () {
-		return user;
+	public int getCreatedBy () {
+		return userId;
 	}
 
 	public int getId () {
@@ -61,8 +61,7 @@ public class Service {
 	}
 
 	public void updateUrl (String newUrl) throws MalformedURLException, URISyntaxException {
-		// TODO - for the actual release, should verity url bfore updating!!!
-		// this.url = verify (newUrl);
+		this.url = verify (newUrl);
 		this.url = newUrl;
 		lastModified = MyStringUtils.getNow ();
 	}
@@ -90,7 +89,7 @@ public class Service {
 
 	// Users should only be able to see their own services, admins should be able to see all!
 	public boolean shouldShowFor (User currentUser) {
-		return user == null || currentUser.isAdmin () || user.equals (currentUser.getUserName ());
+		return userId == -1 || currentUser.isAdmin () || userId == currentUser.getId ();
 	}
 
 }

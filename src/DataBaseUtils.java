@@ -61,7 +61,6 @@ public class DataBaseUtils {
 	public static void storeNewUser (User newUser) {
 		String sql = "insert into users (name, pwd, admin, id) values (?,?,?,?)";
 
-		System.out.println ("Creating new user with id: "+newUser.getId());
 		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql);) {
 			pstmt.setString (1, newUser.getUserName ());
@@ -76,8 +75,7 @@ public class DataBaseUtils {
 
 	public static void updateUser (User user) {
 		String sql = "update users set name = ?, pwd = ?, admin = ? where id = ?";
-		// TODO - this isn't working.. but it should???
-		System.out.println ("Updating user!!");
+
 		try (Connection conn = connect ();
 		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
 			pstmt.setString (1, user.getUserName ());
@@ -100,6 +98,9 @@ public class DataBaseUtils {
 		} catch (SQLException e) {
 			e.printStackTrace ();
 		}
+
+		// I considered also deleting all the services that this users services.
+		// But since admins can see (and delete) all services anyhow it didn't seem all that important...
 	}
 
 	public static List<Service> selectAllServices () {
@@ -112,7 +113,7 @@ public class DataBaseUtils {
 		     ResultSet rs = stmt.executeQuery (sql)) {
 			while (rs.next ())
 				ret.add (new Service (rs.getString ("name"), rs.getString ("url"),
-				                      rs.getString ("created_by"), rs.getString ("created_date"),
+				                      rs.getInt ("created_by"), rs.getString ("created_date"),
 				                      rs.getString ("last_modified_date"), rs.getInt ("id")));
 		} catch (SQLException e) {
 			e.printStackTrace ();
@@ -131,7 +132,7 @@ public class DataBaseUtils {
 			pstmt.setString (2, service.getUrl ());
 			pstmt.setString (3, service.getCreatedTime ());
 			pstmt.setString (4, service.getLastModifiedTime ());
-			pstmt.setString (5, service.getCreatedBy ());
+			pstmt.setInt (5, service.getCreatedBy ());
 			pstmt.setInt (6, service.getId ());
 			pstmt.executeUpdate ();
 		} catch (SQLException e) {

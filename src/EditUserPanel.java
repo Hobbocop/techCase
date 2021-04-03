@@ -133,7 +133,7 @@ public class EditUserPanel extends JPanel {
 
                 var user = userTableModel.getUser (userTable.getSelectedRow ());
 
-                if (user.equals (currentUser)){
+                if (user.equals (currentUser)) {
                         DialogUtils.showMessageDialog (this, CANT_DELETE_MESSAGE, REMOVE_USER_TITLE);
                 }
 
