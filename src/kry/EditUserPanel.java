@@ -92,7 +92,7 @@ public class EditUserPanel extends JPanel {
                         return;
                 }
 
-                var choice = DialogUtils.showEditUserDialog (this, user, currentUser.isAdmin (), EDIT_USER_DIALOG_TITLE);
+                int choice = DialogUtils.showEditUserDialog (this, user, currentUser.isAdmin (), EDIT_USER_DIALOG_TITLE);
 
                 if (DialogUtils.choiceNotOk (choice))
                         return;
@@ -112,7 +112,7 @@ public class EditUserPanel extends JPanel {
 
         private void addNewUser (User currentUser) {
                 User newUser = new User ("", "", false);
-                var choice = DialogUtils.showEditUserDialog (this, newUser, currentUser.isAdmin (),
+                int choice = DialogUtils.showEditUserDialog (this, newUser, currentUser.isAdmin (),
                                                              ADD_USER_DIALOG_TITLE);
 
                 if (DialogUtils.choiceNotOk (choice))
@@ -133,7 +133,7 @@ public class EditUserPanel extends JPanel {
                         return;
                 }
 
-                var user = userTableModel.getUser (userTable.getSelectedRow ());
+                User user = userTableModel.getUser (userTable.getSelectedRow ());
 
                 if (user.equals (currentUser)) {
                         DialogUtils.showMessageDialog (this, CANT_DELETE_MESSAGE, REMOVE_USER_TITLE);

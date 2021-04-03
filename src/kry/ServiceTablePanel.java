@@ -1,8 +1,6 @@
 package kry;
 
 import java.awt.Dimension;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import java.awt.*;
@@ -98,17 +96,16 @@ public class ServiceTablePanel extends JPanel {
 			return;
 		}
 
-		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
+		Service service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
-		var st = new StringTuple (service.getName (), service.getUrl ());
+		StringTuple st = new StringTuple (service.getName (), service.getUrl ());
 
 		DialogUtils.showEditServiceDialog (this, st, EDIT_SERVICE_DIALOG_TITLE);
 
-		try {
-			service.updateName (st.s1);
-			service.updateUrl (st.s2);
-		} catch (MalformedURLException | URISyntaxException e) {
+		service.updateName (st.s1);
+		if (!service.updateUrl (st.s2)) {
 			handleUrlException (st.s2);
+			return;
 		}
 
 		synchronized (service) {
@@ -127,17 +124,15 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private void addNewService () {
-		var sd = new StringTuple ("", "");
+		StringTuple sd = new StringTuple ("", "");
 
 		DialogUtils.showEditServiceDialog (this, sd, ADD_SERVICE_DIALOG_TITLE);
 
 		if (sd.s1.equals ("") || sd.s2.equals (""))
 			return;
 
-		var newService = new Service (sd.s1, "", currentUser.getId ());
-		try {
-			newService.updateUrl (sd.s2);
-		} catch (MalformedURLException | URISyntaxException e) {
+		Service newService = new Service (sd.s1, "", currentUser.getId ());
+		if (!newService.updateUrl (sd.s2)) {
 			handleUrlException (sd.s2);
 			return;
 		}
@@ -157,14 +152,14 @@ public class ServiceTablePanel extends JPanel {
 			return;
 		}
 
-		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
+		Service service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 		serviceTableModel.removeService (service);
 		DataBaseUtils.removeService (service);
 		updateTable ();
 	}
 
 	private Object manuallyTestSelectedService () {
-		var service = serviceTableModel.getService (serviceTable.getSelectedRow ());
+		Service service = serviceTableModel.getService (serviceTable.getSelectedRow ());
 
 		HTTPUtils.testSingleService (service);
 		updateTable ();

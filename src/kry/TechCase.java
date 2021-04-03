@@ -41,7 +41,7 @@ public class TechCase {
 		StringTuple tmpUser;
 		while (currentUser == null) {
 			tmpUser = new StringTuple ("", "");
-			var choice = DialogUtils.showLoginDialog (null, tmpUser, "log in");
+			int choice = DialogUtils.showLoginDialog (null, tmpUser, "log in");
 
 			if (DialogUtils.choiceNotOk (choice))
 				return null;
@@ -63,7 +63,7 @@ public class TechCase {
 	}
 
 	private static List<Service> fetchAllServices (List<User> allUsers, User user) {
-		var allServices = DataBaseUtils.selectAllServices ();
+		List<Service> allServices = DataBaseUtils.selectAllServices ();
 
 		return allServices.stream ().filter (s -> s.shouldShowFor (user)).collect (Collectors.toList ());
 	}

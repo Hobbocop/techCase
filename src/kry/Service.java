@@ -1,8 +1,5 @@
 package kry;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Optional;
 
 /**
@@ -62,15 +59,13 @@ public class Service {
 		return id;
 	}
 
-	public void updateUrl (String newUrl) throws MalformedURLException, URISyntaxException {
-		this.url = verify (newUrl);
+	public boolean updateUrl (String newUrl) {
+		if (newUrl == null || !MyStringUtils.verifyUrl (newUrl))
+			return false;
+
 		this.url = newUrl;
 		lastModified = MyStringUtils.getNow ();
-	}
-
-	private String verify (String newUrl) throws MalformedURLException, URISyntaxException {
-		URL u = new URL (url);
-		return u.toURI ().toString ();
+		return true;
 	}
 
 	public synchronized void updateLastResponse (boolean response) {

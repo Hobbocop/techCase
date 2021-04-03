@@ -1,6 +1,7 @@
 package kry;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -40,15 +41,16 @@ public class ServiceTableModel extends AbstractTableModel {
 	// This method is called by the JTable to figure out what should be written in each cell.
 	// This is the method that's used to explain how a list of services becomes a bunch of cells
 	@Override public Object getValueAt (int row, int column) {
-		var tmp = services.get (row);
+		Service tmp = services.get (row);
 
+		Optional<Boolean> response;
 		// This isn't the prettiest method of converting a Service into a bunch of columns, but I can't figure
 		// out a better method right now.
 		switch (column) {
 			case 0:
 				return tmp.getName ();
 			case 1:
-				var response = tmp.getLastResponseOk ();
+				response = tmp.getLastResponseOk ();
 				if (response.isPresent ())
 					return formatResponse (response.get ());
 				return NO_DATA;

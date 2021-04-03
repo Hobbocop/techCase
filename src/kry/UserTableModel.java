@@ -50,7 +50,7 @@ public class UserTableModel extends AbstractTableModel {
         }
 
         @Override public Object getValueAt (int rowIndex, int columnIndex) {
-                var tmp = allUsers.get (rowIndex);
+                User tmp = allUsers.get (rowIndex);
 
 		// This isn't the prettiest method of converting a User into a bunch of columns, but I can't figure
 		// out a better method right now.

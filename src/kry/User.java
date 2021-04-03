@@ -25,9 +25,7 @@ public class User {
 	}
 
 	private static int generateNewId () {
-		var tmp = DataBaseUtils.getMaxUserId () + 1;
-		System.out.println ("Generating new userId: " + tmp);
-		return tmp;
+		return DataBaseUtils.getMaxUserId () + 1;
 	}
 
 	public String getUserName () {

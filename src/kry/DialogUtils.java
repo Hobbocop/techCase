@@ -48,7 +48,7 @@ public class DialogUtils {
 		if (adminButton != null)
 			servicePanel.add (adminButton);
 
-		var choice = JOptionPane.showConfirmDialog (parent, servicePanel, title, JOptionPane.OK_CANCEL_OPTION,
+		int choice = JOptionPane.showConfirmDialog (parent, servicePanel, title, JOptionPane.OK_CANCEL_OPTION,
 		                                            JOptionPane.PLAIN_MESSAGE);
 
 		if (choiceNotOk (choice))
@@ -100,7 +100,7 @@ public class DialogUtils {
 		adminButton.setSelected (user.isAdmin ());
 		adminButton.setEnabled (currentlyAdmin);
 		
-		var choice = showStringDialog (parent, tuple, title, nameLabel, nameField, newPwdLabel, newPwdField,
+		int choice = showStringDialog (parent, tuple, title, nameLabel, nameField, newPwdLabel, newPwdField,
 					       adminLabel, adminButton);
 
 		if (choiceNotOk (choice))

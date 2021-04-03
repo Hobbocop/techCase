@@ -49,7 +49,7 @@ public class DataBaseUtils {
 		     Statement stmt = conn.createStatement ();
 		     ResultSet rs = stmt.executeQuery (sql)) {
 			while (rs.next ()) {
-				var tmpId = rs.getInt ("id");
+				int tmpId = rs.getInt ("id");
 				if (tmpId > maxId)
 					maxId = tmpId;
 			}
