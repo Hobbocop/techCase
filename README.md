@@ -9,7 +9,7 @@ author: Filip Bark (fbark@kth.se)
 ```
 java -jar tc.jar
 ```
-- There is currently only one user available with username and password both being 1
+- There is currently only one user available with username and password both being "1"
 - Once logged in you can add more users (and also decide if they're admins) by opening user administration tools from the top menu: File->Edit Users...
 - Services will be periodically checked (every 5 seconds) if they're running or not, a satus message at the bottom of the window will say when it the background thread is currently checking all services.
 - Services will be represented as either Online or Offline depending on if we got an aswer or not.
