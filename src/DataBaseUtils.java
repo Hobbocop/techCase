@@ -37,7 +37,7 @@ public class DataBaseUtils {
 	}
 
 	public static int getMaxUserId () {
-		String sql = "select * from services order by id desc limit 1";
+		String sql = "select * from users order by id desc limit 1";
 		return getMaxId (sql);
 	}
 
@@ -56,6 +56,48 @@ public class DataBaseUtils {
 			e.printStackTrace ();
 		}
 		return maxId;
+	}
+
+	public static void storeNewUser (User newUser) {
+		String sql = "insert into users (name, pwd, admin, id) values (?,?,?,?)";
+
+		try (Connection conn = connect ();
+		     PreparedStatement pstmt = conn.prepareStatement (sql);) {
+			pstmt.setString (1, newUser.getUserName ());
+			pstmt.setString (2, newUser.getHashedPassword ());
+			pstmt.setInt (3, newUser.isAdmin () ? 1 : 0);
+			pstmt.setInt (4, newUser.getId ());
+			pstmt.executeUpdate ();
+		} catch (SQLException e) {
+			e.printStackTrace ();
+		}
+	}
+
+	public static void updateUser (User user) {
+		String sql = "update users set name = ?, pwd = ?, admin = ? where id = ?";
+
+		try (Connection conn = connect ();
+		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
+			pstmt.setString (1, user.getUserName ());
+			pstmt.setString (2, user.getHashedPassword ());
+			pstmt.setInt (3, user.isAdmin () ? 1 : 0);
+			pstmt.setInt (4, user.getId ());
+			pstmt.executeUpdate ();
+		} catch (SQLException e) {
+			e.printStackTrace ();
+		}
+	}
+
+	public static void removeUser (User user) {
+		String sql = "delete from users where id = ?";
+
+		try (Connection conn = connect ();
+		     PreparedStatement pstmt = conn.prepareStatement (sql)) {
+			pstmt.setInt (1, user.getId ());
+			pstmt.executeUpdate ();
+		} catch (SQLException e) {
+			e.printStackTrace ();
+		}
 	}
 
 	public static List<Service> selectAllServices () {
