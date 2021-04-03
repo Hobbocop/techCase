@@ -11,6 +11,7 @@ author: Filip Bark (fbark@kth.se)
 ```
 java -jar tc.jar
 ```
+- Or manually compile and run (instructions further down)
 - There is currently only one user available with username and password both being "1" (This user is an Admin, and I would recommend you don't delete or change this users priveleges)
 - Once logged in you can add more users (and also decide if they're admins) by opening user administration tools from the top menu: File->Edit Users...
 - Services will be periodically checked (every 5 seconds) if they're running or not, a satus message at the bottom of the window will say when it the background thread is currently checking all services.
@@ -50,3 +51,19 @@ The database has 2 tables:
   - last_modified_date (string) - Sqlite doesn't handle dates, so the timestamps get formatted to strings. When was the service last modified?
   - created_by (int) - The id of the User that created this service. (Services can only be seen by their owners or Admins)
   - id (int) - a uniqiue identifier for this service, every new service will get max(id)+1.
+
+# How to compile and run manually:
+First download all files then in the main directory run
+```
+javac -d bin src/kry/*.java
+```
+Once the files have been compiled, start the programm manually from the main directory by running:
+```
+java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.TechCase
+```
+
+# How to test
+First, you need to manually compile the code as written above, then you should be able to run the JUNIT tests by running
+```
+TODO - add junit tests...
+```
