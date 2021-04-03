@@ -1,5 +1,7 @@
 # techCase
-Testcase for Kry, by Filip Bark
+Testcase for Kry,
+
+author: Filip Bark (fbark@kth.se)
 
 # How to run:
 - Download all files as the same structure here
@@ -9,6 +11,10 @@ java -jar tc.jar
 ```
 - There is currently only one user available with username and password both being 1
 - Once logged in you can add more users (and also decide if they're admins) by opening user administration tools from the top menu: File->Edit Users...
+- Services will be periodically checked (every 5 seconds) if they're running or not, a satus message at the bottom of the window will say when it the background thread is currently checking all services.
+- Services will be represented as either Online or Offline depending on if we got an aswer or not.
+- Admins can see/add/delete/edit all services, but normal users can only see and manage the services that they've added.
+- Admins can add/delete/edit all users (not delete themselves), including giving admin privileges. Normal users can only change their own data (not give admin priveleges)
 
 
 # Code structure
