@@ -1,11 +1,8 @@
 # techCase
 
-Just adding some descriptive text here.
-
-# TODO - fill out readme with more information!
-
 How to run:
--
-
-Hot to test:
--
+- Download all files as the same structure here
+- Run tc.jar via 
+```
+java -jar tc.jar
+```
