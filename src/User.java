@@ -1,3 +1,4 @@
+package kry;
 
 /**
  * Container class with details regaring users.

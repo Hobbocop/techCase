@@ -1,3 +1,4 @@
+package kry;
 
 /**
  * Struct for storing two strings

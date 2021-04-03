@@ -1,3 +1,5 @@
+package kry;
+
 import java.awt.Dimension;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;

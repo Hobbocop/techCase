@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: Filip Bark
+Class-Path: bin/ lib/sqlite-jdbc-3.32.3.2.jar
+Main-Class: kry.TechCase
