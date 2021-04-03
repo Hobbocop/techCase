@@ -2,6 +2,11 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+/**
+ * Table model used in the table that displays users.
+ *
+ * Author: Filip Bark
+*/
 public class UserTableModel extends AbstractTableModel {
 
         // Serial version is in format date-time to certify uniqueness

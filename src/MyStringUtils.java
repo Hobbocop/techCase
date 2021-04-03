@@ -1,6 +1,11 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Utility class for handling strings
+ *
+ * Author: Filip Bark
+ */
 public class MyStringUtils {
 
 	private static final String DATE_FORMAT = "HH:mm:ss yyyy-MM-dd";

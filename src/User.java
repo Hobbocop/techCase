@@ -1,4 +1,9 @@
 
+/**
+ * Container class with details regaring users.
+ *
+ * Author: Filip Bark
+ */
 public class User {
 	private String userName;
 	private String hashedPassword;
