@@ -123,7 +123,7 @@ public class DataBaseUtils {
 			pstmt.setInt (1, service.getId ());
 			pstmt.executeUpdate ();
 		} catch (SQLException e) {
-			System.out.println (e.getMessage ());
+			e.printStackTrace ();
 		}
 	}
 

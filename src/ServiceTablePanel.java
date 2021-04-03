@@ -18,6 +18,14 @@ import javax.swing.JTable;
  */
 public class ServiceTablePanel extends JPanel {
 
+	private static final String EDIT_SERVICE_DIALOG_TITLE = "Edit selected service";
+	private static final String ADD_SERVICE_DIALOG_TITLE = "Add new service";
+	private static final String REMOVE_SERVICE_DIALOG_TITLE = "Remove selected service";
+	private static final String NO_SERVICE_MESSAGE = "No service selected";
+	private static final String MANUAL_TEST_MESSAGE = "Manually test selected service";
+	private static final String PAUSE_AUTO_TEST_MESSAGE = "Pause automatic testing";
+	private static final String RESUME_AUTO_TEST_MESSAGE = "Resume automatic testing";
+
 	// Serial version is in format date-time to certify uniqueness
 	// I won't actually serialize it, but JFrames implements serializable so I have to declare
 	private static final long serialVersionUID = 2021_04_02_13_24L;
@@ -27,18 +35,10 @@ public class ServiceTablePanel extends JPanel {
 
 	private ServiceTableModel serviceTableModel;
 
-	private static final String EDIT_SERVICE_DIALOG_TITLE = "Edit selected service";
-	private static final String ADD_SERVICE_DIALOG_TITLE = "Add new service";
-	private static final String REMOVE_SERVICE_DIALOG_TITLE = "Remove selected service";
-	private static final String NO_SERVICE_MESSAGE = "No service selected";
-	private static final String MANUAL_TEST_MESSAGE = "Manually test selected service";
-	private static final String PAUSE_AUTO_TEST_MESSAGE = "Pause automatic testing";
-	private static final String RESUME_AUTO_TEST_MESSAGE = "Resume automatic testing";
-
 	public ServiceTablePanel (List<Service> services, User currentUser) {
 		super (new BorderLayout ());
 
-		setPreferredSize (new Dimension (800, 800));
+		setPreferredSize (new Dimension (900, 500));
 		periodicTestingPaused = false;
 		this.currentUser = currentUser;
 
@@ -51,7 +51,8 @@ public class ServiceTablePanel extends JPanel {
 
 	private JTable createTable (List<Service> services) {
 		// Hard coded for ease of use, should be changed later on for scalability
-		String[] columnNames = {"Name", "Status", "Added", "last modeified", "Url"};
+		String[] columnNames = {"Service name", "Service status", "Service added", "Service last modeified",
+					"Service Url"};
 
 		serviceTableModel = new ServiceTableModel (services, columnNames);
 
@@ -119,7 +120,6 @@ public class ServiceTablePanel extends JPanel {
 	}
 
 	private void handleUrlException (String url) {
-		System.out.println ("Invalid URL: " + url);
 		JOptionPane.showMessageDialog (this, "Invalid URL: " + url, EDIT_SERVICE_DIALOG_TITLE,
 					       JOptionPane.ERROR_MESSAGE);
 	}

@@ -36,9 +36,7 @@ public class Service {
 	}
 
 	private static int generateNewId () {
-		var tmp = DataBaseUtils.getMaxServiceId () + 1;
-		System.out.println ("Generating new serviceId: " + tmp);
-		return tmp;
+		return DataBaseUtils.getMaxServiceId () + 1;
 	}
 
 	public String getName () {
@@ -63,7 +61,7 @@ public class Service {
 	}
 
 	public void updateUrl (String newUrl) throws MalformedURLException, URISyntaxException {
-		// TODO - for the actual release, should verity email bfore updating!!!
+		// TODO - for the actual release, should verity url bfore updating!!!
 		// this.url = verify (newUrl);
 		this.url = newUrl;
 		lastModified = MyStringUtils.getNow ();

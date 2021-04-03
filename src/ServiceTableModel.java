@@ -10,6 +10,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class ServiceTableModel extends AbstractTableModel {
 
+	private static final String NO_DATA = "-";
 	// Serial version is in format date-time to certify uniqueness
 	// I won't actually serialize it, but JFrames implements serializable so I have to declare
 	private static final long serialVersionUID = 2021_04_02_13_44L;
@@ -28,7 +29,6 @@ public class ServiceTableModel extends AbstractTableModel {
 
 	public void AddService (Service service) {
 		services.add (service);
-		System.out.println (services);
 	}
 
 	public void removeService (Service service) {
@@ -49,7 +49,7 @@ public class ServiceTableModel extends AbstractTableModel {
 				var response = tmp.getLastResponseOk ();
 				if (response.isPresent ())
 					return formatResponse (response.get ());
-				return "-";
+				return NO_DATA;
 			case 2:
 				return handleTime (tmp.getCreatedTime ());
 			case 3:
@@ -57,7 +57,7 @@ public class ServiceTableModel extends AbstractTableModel {
 			case 4:
 				return tmp.getUrl ();
 			default:
-				return "-";
+				return NO_DATA;
 		}
 	}
 
@@ -66,15 +66,15 @@ public class ServiceTableModel extends AbstractTableModel {
 	// This method [will] format them to look nicer.
 	private Object handleTime (String time) {
 		if (time == null)
-			return "-";
+			return NO_DATA;
 
 		return time;
 	}
 
 	private Object formatResponse (Boolean response) {
 		if (response)
-			return "OK";
-		return "FAIL";
+			return "Online";
+		return "Offline";
 	}
 
 	// None of the cells should be editable...

@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -18,15 +19,14 @@ public class TechCase {
 		// Initialize and load all data
 		List<User> allUsers = fetchAllUsers ();
 		User currentUser = logIn (allUsers);
-		List<Service> services = fetchAllServices (allUsers, currentUser);
 
 		// TODO - add a dialog/panel for managing users...
 
 		// If we were unable to log in - just close the program. This shouldn't really happen...
-		if (currentUser == null) {
-			System.out.println ("No user found");
+		if (currentUser == null)
 			return;
-		}
+
+		List<Service> services = fetchAllServices (allUsers, currentUser);
 
 		// Start the program!
 		run (services, currentUser);
@@ -64,7 +64,9 @@ public class TechCase {
 	}
 
 	private static List<Service> fetchAllServices (List<User> allUsers, User user) {
-		return DataBaseUtils.selectAllServices ();
+		var allServices = DataBaseUtils.selectAllServices ();
+
+		return allServices.stream ().filter (s -> s.shouldShowFor (user)).collect (Collectors.toList ());
 	}
 
 	private static void run (List<Service> services, User currentUser) {
@@ -92,7 +94,7 @@ public class TechCase {
 					// Update the table based on the new results
 					updateTable (frame);
 
-					// Trye to sleep
+					// Try to sleep
 					sleep ();
 
 					// Pause period if button was pressed before or during sleeping phase.
