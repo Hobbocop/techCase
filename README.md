@@ -19,6 +19,28 @@ java -jar tc.jar
 - Admins can see/add/delete/edit all services, but normal users can only see and manage the services that they've added.
 - Admins can add/delete/edit all users (not delete themselves), including giving admin privileges. Normal users can only change their own data (not give admin priveleges)
 
+# How to compile and run manually:
+First download all files then in the main directory run
+```
+javac -d bin src/kry/*.java
+```
+Once the files have been compiled, start the programm manually from the main directory by running:
+```
+java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.TechCase
+```
+
+# How to test
+First, you need to manually compile the code as written above.
+
+Then you need to compile the junit test (not actual junit, just a separate java class that will test all files) 
+```
+javac -d bin src/kry/junit/*.java
+```
+This can then be run (in terminal, for the output, sorry) with:
+```
+java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.junit.TestTechCase
+```
+If no "Error" prints are present - this means all tests passed!
 
 # Code structure
 The main class is called TechCase.java. It will load information from database and also ask user to log in.
@@ -51,19 +73,3 @@ The database has 2 tables:
   - last_modified_date (string) - Sqlite doesn't handle dates, so the timestamps get formatted to strings. When was the service last modified?
   - created_by (int) - The id of the User that created this service. (Services can only be seen by their owners or Admins)
   - id (int) - a uniqiue identifier for this service, every new service will get max(id)+1.
-
-# How to compile and run manually:
-First download all files then in the main directory run
-```
-javac -d bin src/kry/*.java
-```
-Once the files have been compiled, start the programm manually from the main directory by running:
-```
-java -classpath ".:bin:lib/sqlite-jdbc-3.32.3.2.jar" kry.TechCase
-```
-
-# How to test
-First, you need to manually compile the code as written above, then you should be able to run the JUNIT tests by running
-```
-TODO - add junit tests...
-```
