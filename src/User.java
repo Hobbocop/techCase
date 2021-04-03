@@ -13,7 +13,6 @@ public class User {
 
 	public User (String userName, String hashedPassword, boolean isAdmin, int id) {
 		this.userName = userName;
-		// TODO - hash password somehow
 		this.hashedPassword = hashedPassword;
 		this.isAdmin = isAdmin;
 	}
@@ -42,10 +41,6 @@ public class User {
 
 	boolean verify (String enteredUserName, String rawPassword) {
 		boolean verified = userName.equals (enteredUserName);
-
-		// TODO - use the hashing algorithm to hash the entered password, potentionally not here...
-		// TODO - enteredPassword = hash (rawPassword);
-
 		verified &= hashedPassword.equals (rawPassword);
 
 		return verified;

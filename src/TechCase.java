@@ -49,7 +49,6 @@ public class TechCase {
 
 			String userName = tmpUser.s1;
 			String pwd = MyStringUtils.hashPassword (tmpUser.s2);
-			System.out.println(tmpUser.s2 + " -> " + pwd);
 
 			Optional<User> tmp =
 					   allUsers.stream ().filter (u -> u.verify (userName, pwd)).findAny ();
